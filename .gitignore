@@ -1,0 +1,7 @@
+.gradle/
+.idea/
+gradle/
+project/
+target/
+test.iml
+build
