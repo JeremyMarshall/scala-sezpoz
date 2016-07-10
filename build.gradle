@@ -31,23 +31,17 @@ ext {
     ]
 }
 
-task annotate(type: JavaCompile, dependsOn: compileScala) << {
+task annotate (type: JavaCompile) {
+    source = sourceSets.main.output.classesDir
+    include 'mypackage.ScalaUseMyAnnotations$Inner'
+    classpath = sourceSets.main.compileClasspath
+    destinationDir = sourceSets.main.output.classesDir
+    outputs.upToDateWhen { false }
 
-    options.compilerArgs << '-proc:only -processor  net.java.sezpoz.impl.Indexer62 -verbose'
-
-        outputs.upToDateWhen { false }
-        sourceSets {
-            main {
-                java {
-                    'build/classes/main/'
-                }
-            }
-        }
-
-        println("[assemble] ${options.compilerArgs}")
-        println("[assemble] ${sourceSets.main.java}")
+    println("[annotate] ${sourceSets.main.output.classesDir}")
 }
 
+annotate.options.compilerArgs = ['-proc:only',  '-processor',  'net.java.sezpoz.impl.Indexer62',  '-verbose']
 
 task run(type: JavaExec, dependsOn: compileScala) {
     main = 'mypackage.Main'
@@ -55,13 +49,12 @@ task run(type: JavaExec, dependsOn: compileScala) {
     classpath configurations.runtime
 }
 
-//compileScala.doLast {
-//    tasks.annotate.execute()
-//}
+compileScala.doLast {
+    tasks.annotate
+}
 
 dependencies {
     compile group: 'net.java.sezpoz', name: 'sezpoz', version: '1.11'
-
     runtime group: 'org.scala-lang', name: 'scala-library', version: "$versions.scala"
     compile group: 'org.scala-lang', name: 'scala-library', version: "$versions.scala"
 }
