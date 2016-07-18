@@ -41,7 +41,7 @@ task annotate (type: JavaCompile) {
     println("[annotate] ${sourceSets.main.output.classesDir}")
 }
 
-annotate.options.compilerArgs = ['-proc:only',  '-processor',  'net.java.sezpoz.impl.Indexer62',  '-verbose']
+annotate.options.compilerArgs = ['-proc:only',  '-processor',  'net.java.sezpoz.impl.Indexer6',  '-verbose']
 
 task run(type: JavaExec, dependsOn: compileScala) {
     main = 'mypackage.Main'
